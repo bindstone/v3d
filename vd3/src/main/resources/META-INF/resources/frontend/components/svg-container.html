@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="../script/d3.v5.min.js">
+<script src="../script/d3.v5.min.js"></script>
+<dom-module id="svg-container">
+
+    <template>
+        <div id="svgDiv"></div>
+    </template>
+
+    <!-- POLYMER WRAPPER for Vaadin -->
+    <script>
+        class SvgContainer extends Polymer.Element {
+            static get is() {
+                return 'svg-container';
+            }
+
+            static get properties() {
+
+                return {
+                    width: {
+                        type: Number
+                    },
+                    height: {
+                        type: Number
+                    },
+                    svg: {
+                        type: Object
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this.svg = d3.select(this.$.svgDiv).append('svg');
+            }
+
+
+            draw(form, attributes) {
+                var circle = this.svg.append(form);
+                attributes.forEach(function(data) {
+                    circle.attr(Object.keys(data)[0], Object.values(data)[0]);
+                });
+            }
+        }
+
+        window.customElements.define(SvgContainer.is, SvgContainer);
+    </script>
+</dom-module>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.0.3.RELEASE</version>
+      <relativePath/>
+   </parent>
+
+   <groupId>com.bindstone</groupId>
+   <artifactId>vd3-example</artifactId>
+   <version>1.0-SNAPSHOT</version>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java.version>1.8</java.version>
+      <webapp.directory>src/main/webapp</webapp.directory>
+      <vaadin.version>10.0.2</vaadin.version>
+      <vaadin.flow.version>1.0.2</vaadin.flow.version>
+   </properties>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-bom</artifactId>
+            <version>${vaadin.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
+   <dependencies>
+
+      <dependency>
+         <groupId>com.com.bindstone</groupId>
+         <artifactId>vd3</artifactId>
+         <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-devtools</artifactId>
+         <optional>true</optional>
+      </dependency>
+
+      <!-- VAADIN -->
+      <dependency>
+         <groupId>com.vaadin</groupId>
+         <artifactId>vaadin-spring-boot-starter</artifactId>
+         <version>${vaadin.version}</version>
+      </dependency>
+
+   </dependencies>
+
+   <!-- BUILD -->
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </build>
+
+   <!-- PROFILES -->
+
+   <profiles>
+      <profile>
+         <id>productionMode</id>
+         <activation>
+            <property>
+               <name>vaadin.productionMode</name>
+            </property>
+         </activation>
+
+         <dependencies>
+            <dependency>
+               <groupId>com.vaadin</groupId>
+               <artifactId>flow-server-production-mode</artifactId>
+               <version>10.0.0.beta8</version>
+            </dependency>
+         </dependencies>
+
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>com.vaadin</groupId>
+                  <artifactId>flow-maven-plugin</artifactId>
+                  <version>${vaadin.flow.version}</version>
+                  <executions>
+                     <execution>
+                        <goals>
+                           <goal>copy-production-files</goal>
+                           <goal>package-for-production</goal>
+                        </goals>
+                        <configuration>
+                           <transpileOutputDirectory>${webapp.directory}</transpileOutputDirectory>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+
+               <plugin>
+                  <groupId>org.springframework.boot</groupId>
+                  <artifactId>spring-boot-maven-plugin</artifactId>
+                  <version>2.0.3.RELEASE</version>
+                  <configuration>
+                     <jvmArguments>-Dvaadin.productionMode</jvmArguments>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+</project>
