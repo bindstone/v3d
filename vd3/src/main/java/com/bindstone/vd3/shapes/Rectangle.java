@@ -8,6 +8,7 @@ public class Rectangle extends AbstractShape<Rectangle> {
     public static String positionY = "y";
     public static String width = "width";
     public static String height = "height";
+    public static String fill="fill";
 
     private SvgContainer svg;
 
