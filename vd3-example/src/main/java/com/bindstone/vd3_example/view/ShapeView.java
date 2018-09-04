@@ -12,11 +12,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.router.Route;
 
-@Route("")
+@Route("shape")
 @BodySize(height = "100vh", width = "100vw")
-public class MainView extends VerticalLayout {
+public class ShapeView extends VerticalLayout {
 
-    public MainView() {
+    public ShapeView() {
         SvgContainer svgContainer = new SvgContainer(300, 300);
 
         Button btnCircle = new Button("draw circle");
