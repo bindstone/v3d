@@ -1,12 +1,12 @@
 package com.bindstone.vd3_example.view;
 
 import com.bindstone.vd3.SvgContainer;
-import com.bindstone.vd3.shapes.Circle;
-import com.bindstone.vd3.shapes.Ellipse;
-import com.bindstone.vd3.shapes.Line;
-import com.bindstone.vd3.shapes.Rectangle;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Label;
+import com.bindstone.vd3.charts.ChartDataItem;
+import com.bindstone.vd3.charts.ChartsDataSet;
+import com.bindstone.vd3.charts.Line;
+import com.bindstone.vd3_example.entity.BikesPerMonth;
+import com.bindstone.vd3_example.service.DataProvider;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.BodySize;
@@ -17,86 +17,26 @@ import com.vaadin.flow.router.Route;
 public class MainView extends VerticalLayout {
 
     public MainView() {
-        SvgContainer svgContainer = new SvgContainer(300, 300);
+        SvgContainer svgContainer = new SvgContainer(400, 600);
 
-        Button btnCircle = new Button("draw circle");
-        btnCircle.addClickListener(buttonClickEvent -> {
-            new Circle(svgContainer)
-                    .addAttribute(Circle.positionY, 30)
-                    .addAttribute(Circle.positionX, 30)
-                    .addAttribute(Circle.radius, 30)
-                    .addAttribute(Circle.fill, "purple")
-                    .draw();
-        });
+        Line line = new Line();
+        ChartsDataSet data = new ChartsDataSet();
+        for (BikesPerMonth bikesPerMonth : DataProvider.getAll()) {
+            data.add(new ChartDataItem(bikesPerMonth.getMonth().toString(), new Double(bikesPerMonth.getSells())));
+        }
+        line.setChartsDataSet(data);
+        svgContainer.draw(line);
 
-        Button btnRecangle = new Button("draw rectangle");
-        btnRecangle.addClickListener(buttonClickEvent -> {
-            new Rectangle(svgContainer)
-                    .addAttribute(Rectangle.positionY, 100)
-                    .addAttribute(Rectangle.positionX, 100)
-                    .addAttribute(Rectangle.height, 30)
-                    .addAttribute(Rectangle.width, 30)
-                    .draw();
-        });
+        Grid<BikesPerMonth> grid = new Grid<>();
+        grid.setItems(DataProvider.getAll());
 
-        Button btnEllipse = new Button("draw ellipse");
-        btnEllipse.addClickListener(buttonClickEvent -> {
-            new Ellipse(svgContainer)
-                    .addAttribute(Ellipse.positionY, 30)
-                    .addAttribute(Ellipse.positionX, 30)
-                    .addAttribute(Ellipse.height, 80)
-                    .addAttribute(Ellipse.width, 80)
-                    .addAttribute(Ellipse.stroke, "green")
-                    .addAttribute(Ellipse.strokeWidth, 2)
-                    .addAttribute(Ellipse.fill, "yellow")
-                    .draw();
-        });
+        grid.addColumn(BikesPerMonth::getMonth).setHeader("Month");
+        grid.addColumn(BikesPerMonth::getConstructor).setHeader("Constructor");
+        grid.addColumn(BikesPerMonth::getSells).setHeader("Bikes sold");
 
-        Button btnLine = new Button("draw line");
-        btnLine.addClickListener(buttonClickEvent -> {
-            new Line(svgContainer)
-                    .addAttribute(Line.positionY, 70)
-                    .addAttribute(Line.positionX, 70)
-                    .addAttribute(Line.positionY2, 100)
-                    .addAttribute(Line.positionX2, 100)
-                    .addAttribute(Line.stroke, "red")
-                    .addAttribute(Line.strokeWidth, 2)
-                    .draw();
-        });
-
-        Button btnTriangle = new Button("draw triangle");
-        btnTriangle.addClickListener(buttonClickEvent -> {
-            new Line(svgContainer)
-                    .addAttribute(Line.positionY, 100)
-                    .addAttribute(Line.positionX, 160)
-                    .addAttribute(Line.positionY2, 100)
-                    .addAttribute(Line.positionX2, 200)
-                    .addAttribute(Line.stroke, "blue")
-                    .addAttribute(Line.strokeWidth, 2)
-                    .draw();
-            new Line(svgContainer)
-                    .addAttribute(Line.positionY, 50)
-                    .addAttribute(Line.positionX, 180)
-                    .addAttribute(Line.positionY2, 100)
-                    .addAttribute(Line.positionX2, 200)
-                    .addAttribute(Line.stroke, "blue")
-                    .addAttribute(Line.strokeWidth, 2)
-                    .draw();
-            new Line(svgContainer)
-                    .addAttribute(Line.positionY, 100)
-                    .addAttribute(Line.positionX, 160)
-                    .addAttribute(Line.positionY2, 50)
-                    .addAttribute(Line.positionX2, 180)
-                    .addAttribute(Line.stroke, "blue")
-                    .addAttribute(Line.strokeWidth, 2)
-                    .draw();
-        });
-        
-
-        this.add(new Label("SVG POC"));
         HorizontalLayout hl = new HorizontalLayout();
-        hl.add(btnCircle, btnRecangle, btnEllipse, btnLine, btnTriangle);
+        hl.add(grid, svgContainer);
+        hl.setSizeFull();
         this.add(hl);
-        this.add(svgContainer);
     }
 }

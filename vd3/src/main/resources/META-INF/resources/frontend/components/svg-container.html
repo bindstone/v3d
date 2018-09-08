@@ -32,15 +32,80 @@
 
             ready() {
                 super.ready();
-                this.svg = d3.select(this.$.svgDiv).append('svg');
+                this.svg = d3.select(this.$.svgDiv).append('svg')
+                    .attr("width", this.width)
+                    .attr("height", this.height);
             }
 
-
-            draw(form, attributes) {
+            drawShape(form, attributes) {
                 var circle = this.svg.append(form);
                 attributes.forEach(function(data) {
                     circle.attr(Object.keys(data)[0], Object.values(data)[0]);
                 });
+            }
+
+            drawAxes(data) {
+                this.margin = {top: 20, right: 10, bottom: 60, left: 60};
+
+                d3.select('svg')
+                    .append('g')
+                    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
+                this.chartWidth = this.width - this.margin.left - this.margin.right;
+                this.chartHeight = this.height - this.margin.top - this.margin.bottom;
+
+                this.x = d3
+                    .scaleBand()
+                    .rangeRound([0, this.chartWidth]).padding(0.1)
+                    .domain(data.map(function (d) {
+                        return d.valueX
+                    }));
+
+                this.y = d3
+                    .scaleLinear()
+                    .range([this.chartHeight, 0])
+                    .domain([0, 25]);
+
+                this.svg.append('g')
+                    .attr('class', 'axis axis--x')
+                    .attr('transform', 'translate(0,' + this.chartHeight + ')')
+                    .call(d3.axisBottom(this.x))
+                    .selectAll("text")
+                    .style("text-anchor", "end")
+                    .attr("dx", "-0.8em")
+                    .attr("dy", ".15em")
+                    .attr("transform", "rotate(-65)");
+
+                this.svg.append('g')
+                    .attr('class', 'axis axis--y')
+                    .call(d3.axisLeft(this.y))
+                    .append('text')
+                    .attr('class', 'axis-title')
+                    .attr('transform', 'rotate(-90)')
+                    .attr('y', 6)
+                    .attr('dy', '.71em')
+                    .attr('fill', '#000')
+                    .style('text-anchor', 'end')
+                    .text("titleY");
+            }
+
+            drawLine(data) {
+                var that = this;
+                var line = d3.line()
+                    .x(function (d) {
+                        return that.x(d.valueX)
+                    })
+                    .y(function (d) {
+                        return that.y(d.valueY)
+                    });
+
+                this.svg.append('path')
+                    .datum(data)
+                    .attr('class', 'idLine')
+                    .attr('fill', 'none')
+                    .attr('d', line)
+                    .attr('stroke', 'blue')
+                    .attr('stroke-width', '1.5px');
             }
         }
 

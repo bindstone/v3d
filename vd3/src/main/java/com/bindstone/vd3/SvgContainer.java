@@ -1,5 +1,6 @@
 package com.bindstone.vd3;
 
+import com.bindstone.vd3.charts.Line;
 import com.bindstone.vd3.tools.MapToJson;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -33,7 +34,16 @@ public class SvgContainer extends PolymerTemplate<SvgModel> {
     }
 
     public void draw(String form, Map<String, String> attributes) {
-        getElement().callFunction("draw", form, MapToJson.generate(attributes));
+        getElement().callFunction("drawShape", form, MapToJson.generate(attributes));
+    }
+
+    public void draw(Line line) {
+        drawAxes(line);
+        getElement().callFunction("drawLine", MapToJson.generate(line.getChartsDataSet()));
+    }
+
+    public void drawAxes(Line line) {
+        getElement().callFunction("drawAxes", MapToJson.generate(line.getChartsDataSet()));
     }
 
     @DomEvent("click-me")
