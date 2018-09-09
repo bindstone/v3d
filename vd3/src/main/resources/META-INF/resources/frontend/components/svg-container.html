@@ -4,6 +4,7 @@
 <script src="../script/d3.v5.min.js"></script>
 <dom-module id="svg-container">
 
+    <!-- HTML Templete -->
     <template>
         <div id="svgDiv"></div>
     </template>
@@ -15,6 +16,7 @@
                 return 'svg-container';
             }
 
+            <!-- Shared with VAADIN properties -->
             static get properties() {
 
                 return {
@@ -30,6 +32,7 @@
                 };
             }
 
+            <!-- Constructor on Ready -->
             ready() {
                 super.ready();
                 this.svg = d3.select(this.$.svgDiv).append('svg')
@@ -37,13 +40,24 @@
                     .attr("height", this.height);
             }
 
-            drawShape(form, attributes) {
-                var circle = this.svg.append(form);
-                attributes.forEach(function(data) {
-                    circle.attr(Object.keys(data)[0], Object.values(data)[0]);
-                });
+            <!-- Draw Shape -->
+            drawShape(data) {
+                var shape = this.svg.append(data.shape);
+
+                if (data.attributes) {
+                    data.attributes.forEach(function (item) {
+                        shape.attr(Object.keys(item)[0], Object.values(item)[0]);
+                    });
+                }
+
+                if (data.styles) {
+                    data.styles.forEach(function (item) {
+                        shape.style(Object.keys(item)[0], Object.values(item)[0]);
+                    });
+                }
             }
 
+            <!-- Draw Charts Axes -->
             drawAxes(data) {
                 this.margin = {top: 20, right: 10, bottom: 60, left: 60};
 
@@ -57,7 +71,7 @@
                 this.x = d3
                     .scaleBand()
                     .rangeRound([0, this.chartWidth]).padding(0.1)
-                    .domain(data.map(function (d) {
+                    .domain(data.data.map(function (d) {
                         return d.valueX
                     }));
 
@@ -89,7 +103,9 @@
                     .text("titleY");
             }
 
+            <!-- Draw Charts Line -->
             drawLine(data) {
+                console.table(data.data);
                 var that = this;
                 var line = d3.line()
                     .x(function (d) {
@@ -100,15 +116,16 @@
                     });
 
                 this.svg.append('path')
-                    .datum(data)
+                    .datum(data.data)
                     .attr('class', 'idLine')
                     .attr('fill', 'none')
                     .attr('d', line)
-                    .attr('stroke', 'blue')
+                    .attr('stroke', data.color)
                     .attr('stroke-width', '1.5px');
             }
         }
 
+        <!-- POLYMER definition -->
         window.customElements.define(SvgContainer.is, SvgContainer);
     </script>
 </dom-module>

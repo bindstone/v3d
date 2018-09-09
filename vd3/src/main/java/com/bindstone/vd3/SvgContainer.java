@@ -1,55 +1,68 @@
 package com.bindstone.vd3;
 
 import com.bindstone.vd3.charts.Line;
-import com.bindstone.vd3.tools.MapToJson;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.DomEvent;
+import com.bindstone.vd3.shapes.Shape;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.shared.Registration;
 
-import java.util.Map;
-
+/**
+ * Vaadin Polymer Template: SVG Container
+ */
 @Tag("svg-container")
 @HtmlImport("components/svg-container.html")
 public class SvgContainer extends PolymerTemplate<SvgModel> {
 
+    /**
+     * Constuctor of SVG Container
+     *
+     * @param height Height
+     * @param width  Width
+     */
     public SvgContainer(int height, int width) {
         setHeight(height);
         setWidth(width);
     }
 
-    public Registration addClickListener(ComponentEventListener<ClickEvent> listener) {
-        return addListener(ClickEvent.class, listener);
-    }
-
+    /**
+     * Setter Height
+     * @param height Height
+     */
     public void setHeight(int height) {
         getModel().setHeight(height);
     }
 
+    /**
+     * Setter Width
+     * @param width Width
+     */
     public void setWidth(int width) {
         getModel().setWidth(width);
     }
 
-    public void draw(String form, Map<String, String> attributes) {
-        getElement().callFunction("drawShape", form, MapToJson.generate(attributes));
+    /**
+     * Draw a shape (Remote JS-Script)
+     *
+     * @param shape Shape
+     */
+    public void drawShape(Shape shape) {
+        getElement().callFunction("drawShape", shape.getJson());
     }
 
+    /**
+     * Draw a line (Remote JS-Script)
+     * @param line Line
+     */
     public void draw(Line line) {
         drawAxes(line);
-        getElement().callFunction("drawLine", MapToJson.generate(line.getChartsDataSet()));
+        getElement().callFunction("drawLine", line.getJson());
     }
 
+    /**
+     * Draw a Charts Axes (Remote JS-Script)
+     * @param line Line
+     */
     public void drawAxes(Line line) {
-        getElement().callFunction("drawAxes", MapToJson.generate(line.getChartsDataSet()));
-    }
-
-    @DomEvent("click-me")
-    public static class ClickEvent extends ComponentEvent<SvgContainer> {
-        public ClickEvent(SvgContainer source, boolean fromClient) {
-            super(source, fromClient);
-        }
+        getElement().callFunction("drawAxes", line.getJson());
     }
 }

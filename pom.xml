@@ -9,6 +9,13 @@
    <version>1.0-SNAPSHOT</version>
    <packaging>jar</packaging>
 
+   <properties>
+      <!-- ENVIRONMENT -->
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java.version>1.8</java.version>
+   </properties>
+
    <modules>
       <module>vd3</module>
       <module>vd3-example</module>

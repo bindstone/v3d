@@ -24,6 +24,7 @@ public class MainView extends VerticalLayout {
         for (BikesPerMonth bikesPerMonth : DataProvider.getAll()) {
             data.add(new ChartDataItem(bikesPerMonth.getMonth().toString(), new Double(bikesPerMonth.getSells())));
         }
+        line.setColor("green");
         line.setChartsDataSet(data);
         svgContainer.draw(line);
 

@@ -91,7 +91,7 @@ public class ShapeView extends VerticalLayout {
                     .addAttribute(Line.strokeWidth, 2)
                     .draw();
         });
-        
+
 
         this.add(new Label("SVG POC"));
         HorizontalLayout hl = new HorizontalLayout();
