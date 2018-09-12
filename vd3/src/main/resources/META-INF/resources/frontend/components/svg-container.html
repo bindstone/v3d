@@ -59,7 +59,7 @@
 
             <!-- Draw Charts Axes -->
             drawAxes(data) {
-                this.margin = {top: 20, right: 10, bottom: 60, left: 60};
+                this.margin = {top: 20, right: 10, bottom: 60, left: 30};
 
                 d3.select('svg')
                     .append('g')
@@ -82,7 +82,7 @@
 
                 this.svg.append('g')
                     .attr('class', 'axis axis--x')
-                    .attr('transform', 'translate(0,' + this.chartHeight + ')')
+                    .attr('transform', 'translate(' + this.margin.left + ',' + this.chartHeight + ')')
                     .call(d3.axisBottom(this.x))
                     .selectAll("text")
                     .style("text-anchor", "end")
@@ -92,6 +92,7 @@
 
                 this.svg.append('g')
                     .attr('class', 'axis axis--y')
+                    .attr('transform', 'translate(' + this.margin.left + ', 0)')
                     .call(d3.axisLeft(this.y))
                     .append('text')
                     .attr('class', 'axis-title')
@@ -117,6 +118,7 @@
 
                 this.svg.append('path')
                     .datum(data.data)
+                    .attr('transform', 'translate(' + this.margin.left + ', 0)')
                     .attr('class', 'idLine')
                     .attr('fill', 'none')
                     .attr('d', line)
