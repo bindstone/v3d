@@ -1,5 +1,6 @@
 package com.bindstone.vd3;
 
+import com.bindstone.vd3.charts.ChartsContainer;
 import com.bindstone.vd3.charts.Line;
 import com.bindstone.vd3.shapes.Shape;
 import com.vaadin.flow.component.Tag;
@@ -54,15 +55,14 @@ public class SvgContainer extends PolymerTemplate<SvgModel> {
      * @param line Line
      */
     public void draw(Line line) {
-        drawAxes(line);
         getElement().callFunction("drawLine", line.getJson());
     }
 
     /**
-     * Draw a Charts Axes (Remote JS-Script)
-     * @param line Line
+     * Draw a Charts Container (Remote JS-Script)
+     * @param container Charts Container
      */
-    public void drawAxes(Line line) {
-        getElement().callFunction("drawAxes", line.getJson());
+    public void draw(ChartsContainer container) {
+        getElement().callFunction("drawContainer", container.getJson());
     }
 }

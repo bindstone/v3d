@@ -1,5 +1,9 @@
 package com.bindstone.vd3.charts;
 
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,13 +14,13 @@ import java.util.Set;
 public class ChartsDataSet {
 
     // Chart Data Item
-    private Set<ChartDataItem> item;
+    private Set<ChartsDataItem> item;
 
     /**
      * Constructor Creating Set Type LinkedHashSet
      */
     public ChartsDataSet() {
-        this.item = new LinkedHashSet<ChartDataItem>();
+        this.item = new LinkedHashSet<ChartsDataItem>();
     }
 
     /**
@@ -24,7 +28,7 @@ public class ChartsDataSet {
      *
      * @param item item
      */
-    public void add(ChartDataItem item) {
+    public void add(ChartsDataItem item) {
         this.item.add(item);
     }
 
@@ -33,8 +37,30 @@ public class ChartsDataSet {
      *
      * @return Iterator
      */
-    public Iterator<ChartDataItem> iterator() {
+    public Iterator<ChartsDataItem> iterator() {
         return this.item.iterator();
     }
 
+    /**
+     * Get Json Object
+     *
+     * @return Json Object
+     */
+    public JsonArray getJson() {
+        JsonArray js = Json.createArray();
+
+        // add X/Y to Json
+        if (this.item != null) {
+            int i = 0;
+            Iterator<ChartsDataItem> iterator = this.item.iterator();
+            while (iterator.hasNext()) {
+                ChartsDataItem item = iterator.next();
+                JsonObject obj = Json.createObject();
+                obj.put("valueX", item.getValueX());
+                obj.put("valueY", item.getValueY());
+                js.set(i++, obj);
+            }
+        }
+        return js;
+    }
 }

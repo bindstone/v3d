@@ -1,0 +1,132 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="../script/d3.v5.min.js">
+<script src="../script/d3.v5.min.js"></script>
+<dom-module id="svg-container">
+
+    <!-- HTML Templete -->
+    <template>
+        <div id="svgDiv"></div>
+    </template>
+
+    <!-- POLYMER WRAPPER for Vaadin -->
+    <script>
+        class SvgContainer extends Polymer.Element {
+            static get is() {
+                return 'svg-container';
+            }
+
+            <!-- Shared with VAADIN properties -->
+            static get properties() {
+
+                return {
+                    width: {
+                        type: Number
+                    },
+                    height: {
+                        type: Number
+                    },
+                    svg: {
+                        type: Object
+                    }
+                };
+            }
+
+            <!-- Constructor on Ready -->
+            ready() {
+                super.ready();
+                this.svg = d3.select(this.$.svgDiv).append('svg')
+                    .attr("width", this.width)
+                    .attr("height", this.height);
+            }
+
+            <!-- Draw Shape -->
+            drawShape(data) {
+                var shape = this.svg.append(data.shape);
+
+                if (data.attributes) {
+                    data.attributes.forEach(function (item) {
+                        shape.attr(Object.keys(item)[0], Object.values(item)[0]);
+                    });
+                }
+
+                if (data.styles) {
+                    data.styles.forEach(function (item) {
+                        shape.style(Object.keys(item)[0], Object.values(item)[0]);
+                    });
+                }
+            }
+
+            <!-- Draw Charts Axes -->
+            drawAxes(data) {
+                this.margin = {top: 20, right: 10, bottom: 60, left: 30};
+                d3.select('svg')
+                    .append('g')
+                    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
+                this.chartWidth = this.width - this.margin.left - this.margin.right;
+                this.chartHeight = this.height - this.margin.top - this.margin.bottom;
+
+                this.x = d3
+                    .scaleBand()
+                    .rangeRound([0, this.chartWidth]).padding(0.1)
+                    .domain(data.data.map(function (d) {
+                        return d.valueX
+                    }));
+
+                this.y = d3
+                    .scaleLinear()
+                    .range([this.chartHeight, 0])
+                    .domain([0, 25]);
+
+                this.svg.append('g')
+                    .attr('class', 'axis axis--x')
+                    .attr('transform', 'translate(' + this.margin.left + ',' + this.chartHeight + ')')
+                    .call(d3.axisBottom(this.x))
+                    .selectAll("text")
+                    .style("text-anchor", "end")
+                    .attr("dx", "-0.8em")
+                    .attr("dy", ".15em")
+                    .attr("transform", "rotate(-65)");
+
+                this.svg.append('g')
+                    .attr('class', 'axis axis--y')
+                    .attr('transform', 'translate(' + this.margin.left + ', 0)')
+                    .call(d3.axisLeft(this.y))
+                    .append('text')
+                    .attr('class', 'axis-title')
+                    .attr('transform', 'rotate(-90)')
+                    .attr('y', 6)
+                    .attr('dy', '.71em')
+                    .attr('fill', '#000')
+                    .style('text-anchor', 'end')
+                    .text("titleY");
+            }
+
+            <!-- Draw Charts Line -->
+            drawLine(data) {
+                console.table(data.data);
+                var that = this;
+                var line = d3.line()
+                    .x(function (d) {
+                        return that.x(d.valueX)
+                    })
+                    .y(function (d) {
+                        return that.y(d.valueY)
+                    });
+
+                this.svg.append('path')
+                    .datum(data.data)
+                    .attr('transform', 'translate(' + this.margin.left + ', 0)')
+                    .attr('class', 'idLine')
+                    .attr('fill', 'none')
+                    .attr('d', line)
+                    .attr('stroke', data.color)
+                    .attr('stroke-width', '1.5px');
+            }
+        }
+
+        <!-- POLYMER definition -->
+        window.customElements.define(SvgContainer.is, SvgContainer);
+    </script>
+</dom-module>

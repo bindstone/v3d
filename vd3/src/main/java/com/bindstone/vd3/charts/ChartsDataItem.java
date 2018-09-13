@@ -3,7 +3,7 @@ package com.bindstone.vd3.charts;
 /**
  * X/Y Values for mapping in JS
  */
-public class ChartDataItem {
+public class ChartsDataItem {
 
     // Value X
     private String valueX;
@@ -13,7 +13,7 @@ public class ChartDataItem {
     /**
      * Character DataItem
      */
-    public ChartDataItem() {
+    public ChartsDataItem() {
     }
 
     /**
@@ -22,7 +22,7 @@ public class ChartDataItem {
      * @param valueX value X
      * @param valueY value Y
      */
-    public ChartDataItem(String valueX, Double valueY) {
+    public ChartsDataItem(String valueX, Double valueY) {
         this.valueX = valueX;
         this.valueY = valueY;
     }

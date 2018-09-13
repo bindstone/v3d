@@ -1,10 +1,7 @@
 package com.bindstone.vd3.charts;
 
 import elemental.json.Json;
-import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-
-import java.util.Iterator;
 
 /**
  * Charts Line
@@ -69,17 +66,7 @@ public class Line {
 
         // add X/Y to Json
         if (this.chartsDataSet != null) {
-            int i = 0;
-            JsonArray js = Json.createArray();
-            Iterator<ChartDataItem> iterator = this.chartsDataSet.iterator();
-            while (iterator.hasNext()) {
-                ChartDataItem item = iterator.next();
-                JsonObject obj = Json.createObject();
-                obj.put("valueX", item.getValueX());
-                obj.put("valueY", item.getValueY());
-                js.set(i++, obj);
-            }
-            rtn.put("data", js);
+            rtn.put("data", chartsDataSet.getJson());
         }
 
         // add color to Json

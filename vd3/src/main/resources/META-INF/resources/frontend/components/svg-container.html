@@ -57,51 +57,71 @@
                 }
             }
 
-            <!-- Draw Charts Axes -->
-            drawAxes(data) {
-                this.margin = {top: 20, right: 10, bottom: 60, left: 30};
+            <!-- Draw Charts Container -->
+            drawContainer(data) {
+                console.log(data);
+                if (data) {
+                    // Initalize Margins
+                    if (data.margin) {
+                        this.margin = data.margin;
+                    } else {
+                        this.margin = {top: 10, right: 10, bottom: 10, left: 10};
+                    }
+                    this.chartWidth = this.width - this.margin.left - this.margin.right;
+                    this.chartHeight = this.height - this.margin.top - this.margin.bottom;
 
-                d3.select('svg')
-                    .append('g')
-                    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+                    // Initialize Charts (g)
+                    d3.select('svg')
+                        .append('g')
+                        .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
-                this.chartWidth = this.width - this.margin.left - this.margin.right;
-                this.chartHeight = this.height - this.margin.top - this.margin.bottom;
+                    // Initialize Axe X values
+                    if (data.axeX && data.axeX.type === "SCALE_BAND") {
+                        this.x = d3
+                            .scaleBand()
+                            .rangeRound([data.axeX.valueMin, this.chartWidth]).padding(0.1)
+                            .domain(data.data.map(function (d) {
+                                return d.valueX
+                            }));
+                    }
 
-                this.x = d3
-                    .scaleBand()
-                    .rangeRound([0, this.chartWidth]).padding(0.1)
-                    .domain(data.data.map(function (d) {
-                        return d.valueX
-                    }));
+                    // Initialize Axe Y values
+                    if (data.axeY && data.axeY.type === "SCALE_LINEAR") {
+                        this.y = d3
+                            .scaleLinear()
+                            .range([this.chartHeight, data.axeY.valueMin])
+                            .domain([data.axeY.valueMin, data.axeY.valueMax]);
+                    }
 
-                this.y = d3
-                    .scaleLinear()
-                    .range([this.chartHeight, 0])
-                    .domain([0, 25]);
+                    // Append Axe X
+                    if (this.x) {
+                        this.svg.append('g')
+                            .attr('class', 'axis axis--x')
+                            .attr('transform', 'translate(' + this.margin.left + ',' + this.chartHeight + ')')
+                            .call(d3.axisBottom(this.x))
+                            .selectAll("text")
+                            .style("text-anchor", "end")
+                            .attr("dx", "-0.8em")
+                            .attr("dy", ".15em")
+                            .attr("transform", "rotate(-65)");
+                    }
 
-                this.svg.append('g')
-                    .attr('class', 'axis axis--x')
-                    .attr('transform', 'translate(' + this.margin.left + ',' + this.chartHeight + ')')
-                    .call(d3.axisBottom(this.x))
-                    .selectAll("text")
-                    .style("text-anchor", "end")
-                    .attr("dx", "-0.8em")
-                    .attr("dy", ".15em")
-                    .attr("transform", "rotate(-65)");
-
-                this.svg.append('g')
-                    .attr('class', 'axis axis--y')
-                    .attr('transform', 'translate(' + this.margin.left + ', 0)')
-                    .call(d3.axisLeft(this.y))
-                    .append('text')
-                    .attr('class', 'axis-title')
-                    .attr('transform', 'rotate(-90)')
-                    .attr('y', 6)
-                    .attr('dy', '.71em')
-                    .attr('fill', '#000')
-                    .style('text-anchor', 'end')
-                    .text("titleY");
+                    // Append Axe Y
+                    if (this.y) {
+                        this.svg.append('g')
+                            .attr('class', 'axis axis--y')
+                            .attr('transform', 'translate(' + this.margin.left + ', 0)')
+                            .call(d3.axisLeft(this.y))
+                            .append('text')
+                            .attr('class', 'axis-title')
+                            .attr('transform', 'rotate(-90)')
+                            .attr('y', 6)
+                            .attr('dy', '.71em')
+                            .attr('fill', '#000')
+                            .style('text-anchor', 'end')
+                            .text("titleY");
+                    }
+                }
             }
 
             <!-- Draw Charts Line -->
