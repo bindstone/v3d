@@ -1,3 +1,14 @@
 = VD3 / Vaadin / SVG / D3.js
 
-3D.js Wrapper for Vaadin.
+This is a simple POC for:
+
+* Vaadin 10 with a Polymer external component
+* Drawing shapes (SVG, D3.js)
+* Drawing a Graph with D3.js
+
+http://127.0.0.1:8080/ -> Graph
+image:https://github.com/bindstone/v3d/tree/master/screenshots/Screen_Shot_1.jpg[]
+
+http://127.0.0.1:8080/shape -> Draw an image
+image:https://github.com/bindstone/v3d/tree/master/screenshots/Screen_Shot_2.jpg[]
+
