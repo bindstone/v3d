@@ -8,9 +8,9 @@ This is a simple POC for:
 
 http://127.0.0.1:8080/ -> Graph
 
-image:https://github.com/bindstone/v3d/tree/master/screenshots/Screen_Shot_1.png[]
+image:https://github.com/bindstone/v3d/blob/master/screenshots/Screen_Shot_1.png[]
 
 http://127.0.0.1:8080/shape -> Draw an image
 
-image:https://github.com/bindstone/v3d/tree/master/screenshots/Screen_Shot_2.png[]
+image:https://github.com/bindstone/v3d/blob/master/screenshots/Screen_Shot_2.png[]
 
